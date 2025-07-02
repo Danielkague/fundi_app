@@ -1,0 +1,105 @@
+<!-- templates/dashboard.html - Improved Fundi Dashboard Page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundi Dashboard - ServiceConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="main-bg">
+  <header class="main-header">
+    <div class="header-content">
+      <h1>Welcome, <span id="dashboard-username">Fundi</span>!</h1>
+      <button id="logout-btn" class="btn btn-secondary">Logout</button>
+    </div>
+  </header>
+  <main class="container">
+    <section class="card">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div style="background: #0ea5e9; color: #fff; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold;">
+          <span id="profile-initial">F</span>
+        </div>
+        <div>
+          <div style="font-weight: bold; color: #0ea5e9; font-size: 1.1rem;" id="dashboard-username-profile">Fundi</div>
+          <div style="font-size: 0.95rem; color: #666;" id="profile-service">Service</div>
+          <div style="font-size: 0.9rem; color: #888;" id="profile-location">Location</div>
+        </div>
+      </div>
+      <div style="text-align:right;margin-top:8px;">
+        <a href="#" id="edit-profile-link" style="color:#0ea5e9; text-decoration:underline; font-size:1rem;">Edit Profile</a>
+      </div>
+    </section>
+    <section class="card">
+      <div class="earnings-card">
+        <div>
+          <div class="earnings-label">Earnings Today</div>
+          <div id="earnings-today" class="earnings-amount">Ksh 0</div>
+          <div class="earnings-label">This Week: <span id="earnings-week">Ksh 0</span></div>
+          <div class="earnings-label">Total: <span id="earnings-total">Ksh 0</span></div>
+        </div>
+        <div class="earnings-icon">💰</div>
+      </div>
+    </section>
+    <section class="card">
+      <h2 class="card-title">Earnings Overview</h2>
+      <div id="earnings-bar-container" style="width:100%;height:32px;background:#f1f5f9;border-radius:8px;overflow:hidden;display:flex;align-items:center;">
+        <div id="earnings-bar-today" style="height:100%;background:#0ea5e9;width:0;"></div>
+        <div id="earnings-bar-week" style="height:100%;background:#a855f7;width:0;"></div>
+        <div id="earnings-bar-total" style="height:100%;background:#22c55e;width:0;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.95rem;margin-top:6px;">
+        <span style="color:#0ea5e9;">Today</span>
+        <span style="color:#a855f7;">Week</span>
+        <span style="color:#22c55e;">Total</span>
+      </div>
+    </section>
+    <section class="card">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <h2 class="card-title" style="font-size:1.2rem; text-align:left; margin-bottom:0;">Today's Jobs</h2>
+        <span id="job-alert-badge" class="badge hidden">0</span>
+      </div>
+      <div id="jobs-list">
+        <!-- Job cards will be rendered here by JS -->
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;">
+        <button class="btn btn-secondary job-filter" data-status="all">All</button>
+        <button class="btn btn-secondary job-filter" data-status="pending">Pending</button>
+        <button class="btn btn-secondary job-filter" data-status="in_progress">In Progress</button>
+        <button class="btn btn-secondary job-filter" data-status="completed">Completed</button>
+        <button class="btn btn-secondary job-filter" data-status="paid">Paid</button>
+      </div>
+    </section>
+    <section class="card">
+      <h2 class="card-title">Potential Jobs</h2>
+      <div id="potential-jobs-list">
+        <!-- Potential jobs will be rendered here by JS -->
+      </div>
+    </section>
+  </main>
+  <!-- Profile Edit Modal -->
+  <div id="profile-modal" class="hidden" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:1000;">
+    <div style="background:#fff;padding:24px 18px;border-radius:14px;max-width:340px;width:95vw;">
+      <h3 style="color:#0ea5e9;font-size:1.2rem;margin-bottom:12px;">Edit Profile</h3>
+      <form id="profile-edit-form">
+        <div class="form-group"><label for="edit-name">Name</label><input id="edit-name" type="text" required placeholder="Enter your name" title="Name"></div>
+        <div class="form-group"><label for="edit-service">Service</label><input id="edit-service" type="text" placeholder="e.g. Plumber, Electrician" title="Service"></div>
+        <div class="form-group"><label for="edit-location">Location</label><input id="edit-location" type="text" placeholder="e.g. Nairobi" title="Location"></div>
+        <div class="form-group"><label for="edit-email">Email</label><input id="edit-email" type="email" placeholder="Enter your email" title="Email"></div>
+        <div style="display:flex;gap:10px;margin-top:14px;">
+          <button type="submit" class="btn btn-primary" style="flex:1;">Save</button>
+          <button type="button" id="close-profile-modal" class="btn btn-secondary" style="flex:1;">Cancel</button>
+        </div>
+        <div id="profile-edit-success" class="hidden" style="color:#22c55e;margin-top:8px;font-size:0.97rem;">Profile updated!</div>
+      </form>
+    </div>
+  </div>
+  <footer class="main-footer">
+    <div class="footer-content">
+      <span>&copy; {{ 2024 }} ServiceConnect. All rights reserved.</span>
+      <span>Made for Kenya | <a href="#" style="color:#0ea5e9;">Contact Us</a></span>
+    </div>
+  </footer>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html> 

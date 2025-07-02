@@ -1,0 +1,52 @@
+<!-- templates/client_dashboard.html - Client Dashboard Page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard - ServiceConnect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="main-bg">
+  <input type="hidden" id="client-name" value="{{ session.get('client_name', '') }}" />
+  <header class="main-header">
+    <div class="header-content">
+      <h1>Welcome, <span id="client-header-name">{{ session.get('client_name', 'Client') }}</span>!</h1>
+      <button id="logout-btn" class="btn btn-secondary">Logout</button>
+    </div>
+  </header>
+  <main class="container">
+    <section class="card">
+      <h2 class="card-title">Request a Service</h2>
+      <form id="service-request-form">
+        <div class="form-group"><label for="request-service">Service Needed</label><input id="request-service" type="text" required placeholder="e.g. Plumbing, Electrical" title="Service Needed"></div>
+        <div class="form-group"><label for="request-date">Date</label><input id="request-date" type="date" required placeholder="Select date" title="Date"></div>
+        <div class="form-group"><label for="request-location">Location</label><input id="request-location" type="text" required placeholder="e.g. Nairobi" title="Location"></div>
+        <div class="form-group"><label for="request-amount">Budget (Ksh)</label><input id="request-amount" type="number" min="0" required placeholder="e.g. 2000" title="Budget (Ksh)"></div>
+        <button type="submit" class="btn btn-primary" style="margin-top:10px;width:100%;">Submit Request</button>
+        <div id="request-success" class="hidden" style="color:#22c55e;margin-top:8px;font-size:0.97rem;">Request submitted!</div>
+      </form>
+    </section>
+    <section class="card">
+      <h2 class="card-title">Your Job Requests</h2>
+      <div id="client-jobs-list">
+        <!-- Client jobs will be rendered here by JS -->
+      </div>
+    </section>
+    <section class="card">
+      <h2 class="card-title">Browse Fundis</h2>
+      <input id="search-fundi" type="text" placeholder="Search by service or name..." style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid #cbd5e1;margin-bottom:10px;">
+      <div id="fundis-list">
+        <!-- Fundis will be rendered here by JS -->
+      </div>
+    </section>
+  </main>
+  <footer class="main-footer">
+    <div class="footer-content">
+      <span>&copy; {{ 2024 }} ServiceConnect. All rights reserved.</span>
+      <span>Made for Kenya | <a href="#" style="color:#0ea5e9;">Contact Us</a></span>
+    </div>
+  </footer>
+  <script src="{{ url_for('static', filename='js/client_app.js') }}"></script>
+</body>
+</html> 
