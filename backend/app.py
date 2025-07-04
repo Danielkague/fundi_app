@@ -22,15 +22,17 @@ from backend.models import User, Job, Earning
 
 app.secret_key = app.config['SECRET_KEY']
 
-import os
-print("TEMPLATE FOLDER (Flask):", app.template_folder)
-print("TEMPLATE FOLDER (abs):", os.path.abspath(app.template_folder))
-print("TEMPLATES DIR EXISTS:", os.path.isdir(app.template_folder))
-print("TEMPLATES DIR CONTENTS:", os.listdir(app.template_folder))
-print("STATIC FOLDER (Flask):", app.static_folder)
-print("STATIC FOLDER (abs):", os.path.abspath(app.static_folder))
-print("STATIC DIR EXISTS:", os.path.isdir(app.static_folder))
-print("STATIC DIR CONTENTS:", os.listdir(app.static_folder))
+# Only print debug info in development
+if app.config.get('DEBUG', False):
+    import os
+    print("TEMPLATE FOLDER (Flask):", app.template_folder)
+    print("TEMPLATE FOLDER (abs):", os.path.abspath(app.template_folder))
+    print("TEMPLATES DIR EXISTS:", os.path.isdir(app.template_folder))
+    print("TEMPLATES DIR CONTENTS:", os.listdir(app.template_folder))
+    print("STATIC FOLDER (Flask):", app.static_folder)
+    print("STATIC FOLDER (abs):", os.path.abspath(app.static_folder))
+    print("STATIC DIR EXISTS:", os.path.isdir(app.static_folder))
+    print("STATIC DIR CONTENTS:", os.listdir(app.static_folder))
 
 @app.route('/')
 def landing():
@@ -358,4 +360,9 @@ def profile_page():
     return render_template('profile.html', user=user)
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    # For local development
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+else:
+    # For production deployment
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port) 

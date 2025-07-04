@@ -1,105 +1,127 @@
-# Fundi Booking Web App (ServiceConnect)
+# Fundi Booking App
 
-A modern, desktop-first web app for booking and managing local service providers (Fundis) in Kenya.
+A Flask-based web application for connecting clients with skilled workers (fundis) for various services.
 
 ## Features
-- **User Roles:** Fundi (service provider) and Client (service requester)
-- **Registration & Login:** Role-based authentication
-- **Fundi Dashboard:**
-  - View, accept, decline, and complete jobs
-  - Track earnings (today, week, total)
-  - See and manage active jobs
-  - See client name and phone for assigned jobs
-  - Edit profile
-- **Client Dashboard:**
-  - Request services via a form
-  - Track job requests and statuses
-  - See assigned fundi's name and phone
-  - Browse/search available fundis (scrollable cards)
-- **Responsive Design:** Looks great on desktop and mobile, but optimized for desktop
-- **Modern Navigation:** Consistent navigation bar on all pages
-- **Flash Messages:** User feedback for actions (e.g., job request submitted)
-- **Supabase/Postgres Database:** Cloud-hosted, scalable, and secure
+
+- **User Authentication**: Registration and login for both clients and fundis
+- **Role-based Dashboards**: Separate interfaces for clients and fundis
+- **Job Management**: Create, accept, decline, and complete jobs
+- **Earnings Tracking**: Fundis can track their earnings
+- **Contact Information**: Clients and fundis can view each other's contact details
+- **Responsive Design**: Modern dark-themed UI that works on all devices
 
 ## Tech Stack
-- **Backend:** Python Flask, SQLAlchemy
-- **Frontend:** HTML, CSS, Vanilla JS
-- **Database:** Supabase (PostgreSQL)
 
-## Folder Structure
-```
-fundi_app/
-  ├── static/
-  │     ├── css/
-  │     └── js/
-  ├── templates/
-  │     ├── dashboard.html
-  │     ├── client_dashboard.html
-  │     ├── profile.html
-  │     └── ...
-  ├── backend/
-  │     ├── app.py
-  │     ├── models.py
-  │     ├── db.py
-  │     └── config.py
-  ├── requirements.txt
-  ├── README.md
-  └── ...
-```
+- **Backend**: Flask (Python)
+- **Database**: PostgreSQL (Supabase)
+- **Frontend**: HTML, CSS, JavaScript
+- **Deployment**: Render.com ready
 
-## Local Setup Instructions
+## Local Development
 
-### 1. Clone the Repository
-```sh
+### Prerequisites
+
+- Python 3.7+
+- PostgreSQL database (or Supabase account)
+
+### Installation
+
+1. Clone the repository:
+```bash
 git clone <your-repo-url>
 cd fundi_app
 ```
 
-### 2. Set Up Python Environment
-```sh
-python -m venv .venv
-# On Windows:
-.venv\Scripts\activate
-# On Mac/Linux:
-source .venv/bin/activate
+2. Install dependencies:
+```bash
 pip install -r requirements.txt
 ```
 
-### 3. Set Up Supabase/Postgres Database
-- Create a [Supabase](https://supabase.com/) project.
-- In the Supabase dashboard, go to **Database** > **Connect** and copy your connection string (use the IPv4-compatible pooler URI).
-- In `backend/config.py`, set your connection string:
-  ```python
-  SQLALCHEMY_DATABASE_URI = 'postgresql://<user>:<password>@<host>:<port>/<database>'
-  ```
-- In Supabase, use the SQL editor to run your schema (see `fundidb_schema.sql`).
-- (Optional) Import sample data from `fundidb_sample_data.sql`.
-
-### 4. Initialize the Database Tables (if needed)
-```sh
-# From the project root:
-flask init-db
+3. Set up environment variables (create a `.env` file):
+```bash
+DATABASE_URL=your_supabase_connection_string
+SECRET_KEY=your_secret_key
+FLASK_DEBUG=True
 ```
 
-### 5. Run the App
-```sh
+4. Initialize the database:
+```bash
+python -m backend.app init-db
+```
+
+5. Run the application:
+```bash
 python -m backend.app
 ```
-- Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser.
 
-## Usage
-- **Register** as a Fundi or Client.
-- **Fundis:** Manage jobs, see client info, track earnings, and update your profile.
-- **Clients:** Request services, track jobs, see your assigned fundi's contact info, and browse available fundis.
+The app will be available at `http://localhost:5000`
 
-## Team Collaboration
-- Each team member should set up their own Supabase project or use a shared one.
-- Share code via GitHub or your preferred platform.
-- Update the DB URI in your config as needed.
+## Deployment
+
+### Deploy to Render.com
+
+1. **Connect your GitHub repository** to Render.com
+
+2. **Create a new Web Service**:
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `gunicorn backend.app:app`
+
+3. **Set Environment Variables**:
+   - `DATABASE_URL`: Your Supabase PostgreSQL connection string
+   - `SECRET_KEY`: A secure random string for session encryption
+   - `FLASK_DEBUG`: Set to `False` for production
+
+4. **Deploy**: Render will automatically deploy your app and provide a URL
+
+### Environment Variables
+
+- `DATABASE_URL`: PostgreSQL connection string
+- `SECRET_KEY`: Flask secret key for session management
+- `FLASK_DEBUG`: Set to `False` in production
+
+## Project Structure
+
+```
+fundi_app/
+├── backend/
+│   ├── app.py          # Main Flask application
+│   ├── config.py       # Configuration settings
+│   ├── db.py          # Database initialization
+│   └── models.py      # SQLAlchemy models
+├── static/
+│   ├── css/
+│   │   └── styles.css  # Main stylesheet
+│   └── js/
+│       ├── app.js      # Main JavaScript
+│       └── client_app.js
+├── templates/
+│   ├── dashboard.html      # Fundi dashboard
+│   ├── client_dashboard.html
+│   ├── index.html         # Login page
+│   ├── landing.html       # Landing page
+│   ├── profile.html       # Profile page
+│   └── register.html      # Registration page
+├── Procfile              # For deployment
+├── requirements.txt      # Python dependencies
+└── README.md
+```
+
+## Database Schema
+
+The app uses PostgreSQL with the following main tables:
+- `users`: User accounts (clients and fundis)
+- `jobs`: Job listings and assignments
+- `earnings`: Fundi earnings tracking
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
 ## License
-MIT (or specify your license)
 
----
-
-For more, see code comments and documentation in each file. 
+This project is licensed under the MIT License. 

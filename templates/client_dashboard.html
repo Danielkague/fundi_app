@@ -55,7 +55,7 @@
                     <div>Fundi: {{ job.fundi_name }}</div>
                     {% endif %}
                     {% if job.fundi_phone %}
-                    <div>Fundi Phone: {{ job.fundi_phone }}</div>
+                    <div>Fundi Phone: <a href="tel:{{ job.fundi_phone }}">{{ job.fundi_phone }}</a></div>
                     {% endif %}
                 </div>
                 {% else %}
