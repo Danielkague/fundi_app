@@ -16,30 +16,93 @@
     </div>
   </header>
   <main class="container">
-    <section class="card">
-      <h2 class="card-title">Request a Service</h2>
-      <form id="service-request-form">
-        <div class="form-group"><label for="request-service">Service Needed</label><input id="request-service" type="text" required placeholder="e.g. Plumbing, Electrical" title="Service Needed"></div>
-        <div class="form-group"><label for="request-date">Date</label><input id="request-date" type="date" required placeholder="Select date" title="Date"></div>
-        <div class="form-group"><label for="request-location">Location</label><input id="request-location" type="text" required placeholder="e.g. Nairobi" title="Location"></div>
-        <div class="form-group"><label for="request-amount">Budget (Ksh)</label><input id="request-amount" type="number" min="0" required placeholder="e.g. 2000" title="Budget (Ksh)"></div>
-        <button type="submit" class="btn btn-primary" style="margin-top:10px;width:100%;">Submit Request</button>
-        <div id="request-success" class="hidden" style="color:#22c55e;margin-top:8px;font-size:0.97rem;">Request submitted!</div>
-      </form>
-    </section>
-    <section class="card">
-      <h2 class="card-title">Your Job Requests</h2>
-      <div id="client-jobs-list">
-        <!-- Client jobs will be rendered here by JS -->
-      </div>
-    </section>
-    <section class="card">
-      <h2 class="card-title">Browse Fundis</h2>
-      <input id="search-fundi" type="text" placeholder="Search by service or name..." style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid #cbd5e1;margin-bottom:10px;">
-      <div id="fundis-list">
-        <!-- Fundis will be rendered here by JS -->
-      </div>
-    </section>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="nav-title">Fundi App</div>
+        <div class="nav-links">
+            <a href="/client-dashboard" class="nav-link">Dashboard</a>
+            <a href="/profile" class="nav-link">Profile</a>
+        </div>
+    </div>
+
+    <div class="dashboard-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div style="margin-bottom:18px;">
+              {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+        <div class="profile-quick">
+            <div class="profile-avatar">{{ user.name[0]|upper }}</div>
+            <div class="profile-info">
+                <div><strong>{{ user.name }}</strong></div>
+                <div>{{ user.phone }}</div>
+            </div>
+        </div>
+        <div>
+            <div class="section-title">My Jobs</div>
+            <div class="card-list">
+                {% for job in jobs %}
+                <div class="card">
+                    <div><strong>{{ job.title }}</strong></div>
+                    <div>{{ job.date }}</div>
+                    <div>{{ job.location }}</div>
+                    <div>Status: {{ job.status }}</div>
+                    {% if job.fundi_name %}
+                    <div>Fundi: {{ job.fundi_name }}</div>
+                    {% endif %}
+                    {% if job.fundi_phone %}
+                    <div>Fundi Phone: {{ job.fundi_phone }}</div>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div>No jobs yet.</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div>
+            <div class="section-title">Request a Service</div>
+            <form method="post" action="/api/client/jobs">
+                <label>
+                    Job Title
+                    <input type="text" name="title" placeholder="Job Title" title="Job Title" required>
+                </label>
+                <label>
+                    Location
+                    <input type="text" name="location" placeholder="Location" title="Location" required>
+                </label>
+                <label>
+                    Date
+                    <input type="date" name="date" title="Date" required>
+                </label>
+                <label>
+                    Amount
+                    <input type="number" name="amount" placeholder="Amount" title="Amount" required>
+                </label>
+                <button type="submit">Request</button>
+            </form>
+        </div>
+        <div>
+            <div class="section-title">Available Fundis</div>
+            <div class="fundi-scroll">
+                {% for fundi in fundis %}
+                <div class="fundi-card">
+                    <div class="fundi-avatar">{{ fundi.name[0]|upper }}</div>
+                    <div class="fundi-info">
+                        <div><strong>{{ fundi.name }}</strong></div>
+                        <div>{{ fundi.service }}</div>
+                        <div>{{ fundi.location }}</div>
+                    </div>
+                </div>
+                {% else %}
+                <div>No fundis available.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
   </main>
   <footer class="main-footer">
     <div class="footer-content">
@@ -48,5 +111,24 @@
     </div>
   </footer>
   <script src="{{ url_for('static', filename='js/client_app.js') }}"></script>
+  <style>
+  .flash-message {
+    padding: 12px 18px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+  .flash-success {
+    background: #e0f7fa;
+    color: #00796b;
+    border: 1px solid #4dd0e1;
+  }
+  .flash-error {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+  }
+  </style>
 </body>
 </html> 

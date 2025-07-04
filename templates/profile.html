@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Fundi App</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-title">Fundi App</div>
+        <div class="nav-links">
+            {% if user.role == 'client' %}
+            <a href="/client-dashboard" class="nav-link">Dashboard</a>
+            {% else %}
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            {% endif %}
+            <a href="/profile" class="nav-link">Profile</a>
+        </div>
+    </div>
+    <div class="dashboard-container">
+        <div class="profile-quick">
+            <div class="profile-avatar">{{ user.name[0]|upper }}</div>
+            <div class="profile-info">
+                <div><strong>{{ user.name }}</strong></div>
+                <div>{{ user.phone }}</div>
+                <div>{{ user.email }}</div>
+                <div>{{ user.location }}</div>
+                <div>{{ user.service }}</div>
+                <div>Role: {{ user.role|capitalize }}</div>
+            </div>
+        </div>
+        <div class="card">
+            <h2 class="card-title">Profile Details</h2>
+            <ul style="list-style:none;padding:0;">
+                <li><strong>Name:</strong> {{ user.name }}</li>
+                <li><strong>Phone:</strong> {{ user.phone }}</li>
+                <li><strong>Email:</strong> {{ user.email }}</li>
+                <li><strong>Location:</strong> {{ user.location }}</li>
+                <li><strong>Service:</strong> {{ user.service }}</li>
+                <li><strong>Role:</strong> {{ user.role|capitalize }}</li>
+                <li><strong>Joined:</strong> {{ user.created_at.strftime('%Y-%m-%d') if user.created_at else '' }}</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html> 

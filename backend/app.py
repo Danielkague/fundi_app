@@ -219,7 +219,26 @@ def dashboard_page():
     if not user_id:
         return redirect('/login')
     user = User.query.get(user_id)
-    return render_template('dashboard.html', username=user.name if user else 'Fundi')
+    # Active jobs for this fundi
+    active_jobs = []
+    jobs = Job.query.filter_by(fundi_id=user_id, status='in_progress').all() if user_id else []
+    for job in jobs:
+        customer_name = job.customer
+        customer_phone = None
+        customer = User.query.filter_by(name=customer_name, role='client').first()
+        if customer:
+            customer_phone = customer.phone
+        active_jobs.append({
+            'id': job.id,
+            'title': job.title,
+            'date': job.date,
+            'location': job.location,
+            'status': job.status,
+            'customer_name': customer_name,
+            'customer_phone': customer_phone
+        })
+    earnings = []  # Replace with your actual earnings query if needed
+    return render_template('dashboard.html', user=user, active_jobs=active_jobs, earnings=earnings)
 
 # --- Potential Jobs for Fundi ---
 @app.route('/api/potential-jobs', methods=['GET'])
@@ -284,13 +303,14 @@ def client_jobs():
             })
         return jsonify(jobs_list)
     # POST: create a new job request
-    data = request.json
-    title = data.get('service')
+    data = request.form
+    title = data.get('title')
     date = data.get('date')
     location = data.get('location')
     amount = data.get('amount')
     if not title or not date or not location or not amount:
-        return jsonify({'error': 'Missing required fields'}), 400
+        flash('Please fill in all required fields.', 'error')
+        return redirect('/client-dashboard')
     job = Job(
         title=title,
         date=date,
@@ -302,7 +322,8 @@ def client_jobs():
     )
     db.session.add(job)
     db.session.commit()
-    return jsonify({'message': 'Job request submitted', 'job_id': job.id})
+    flash('Job request submitted successfully!', 'success')
+    return redirect('/client-dashboard')
 
 # --- Fundi Search ---
 @app.route('/api/fundis', methods=['GET'])
@@ -322,7 +343,19 @@ def search_fundis():
 
 @app.route('/client-dashboard')
 def client_dashboard_page():
-    return render_template('client_dashboard.html')
+    user_id = session.get('user_id')
+    user = User.query.get(user_id) if user_id else None
+    jobs = Job.query.filter_by(customer=user.name).all() if user else []
+    fundis = User.query.filter_by(role='fundi').all()
+    return render_template('client_dashboard.html', user=user, jobs=jobs, fundis=fundis)
+
+@app.route('/profile')
+def profile_page():
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect('/login')
+    user = User.query.get(user_id)
+    return render_template('profile.html', user=user)
 
 if __name__ == '__main__':
     app.run(debug=True) 

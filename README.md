@@ -1,6 +1,6 @@
 # Fundi Booking Web App (ServiceConnect)
 
-A modern, mobile-first web app for booking and managing local service providers (Fundis) in Kenya.
+A modern, desktop-first web app for booking and managing local service providers (Fundis) in Kenya.
 
 ## Features
 - **User Roles:** Fundi (service provider) and Client (service requester)
@@ -9,36 +9,42 @@ A modern, mobile-first web app for booking and managing local service providers 
   - View, accept, decline, and complete jobs
   - Track earnings (today, week, total)
   - See and manage active jobs
+  - See client name and phone for assigned jobs
   - Edit profile
 - **Client Dashboard:**
-  - Request services
+  - Request services via a form
   - Track job requests and statuses
   - See assigned fundi's name and phone
-  - Browse/search fundis
-- **Responsive Design:** Looks great on desktop and mobile
-- **M-Pesa Payment (Mocked):** Simulate job payments
+  - Browse/search available fundis (scrollable cards)
+- **Responsive Design:** Looks great on desktop and mobile, but optimized for desktop
+- **Modern Navigation:** Consistent navigation bar on all pages
+- **Flash Messages:** User feedback for actions (e.g., job request submitted)
+- **Supabase/Postgres Database:** Cloud-hosted, scalable, and secure
 
 ## Tech Stack
 - **Backend:** Python Flask, SQLAlchemy
 - **Frontend:** HTML, CSS, Vanilla JS
-- **Database:** MySQL
+- **Database:** Supabase (PostgreSQL)
 
 ## Folder Structure
 ```
 fundi_app/
   ├── static/
   │     ├── css/
-  │     ├── js/
-  │     └── images/
+  │     └── js/
   ├── templates/
-  │     └── index.html
+  │     ├── dashboard.html
+  │     ├── client_dashboard.html
+  │     ├── profile.html
+  │     └── ...
   ├── backend/
   │     ├── app.py
   │     ├── models.py
+  │     ├── db.py
   │     └── config.py
   ├── requirements.txt
   ├── README.md
-  └── .gitignore
+  └── ...
 ```
 
 ## Local Setup Instructions
@@ -59,32 +65,17 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Set Up MySQL Database
-- Install MySQL if you don't have it.
-- Create a database:
-  ```sql
-  CREATE DATABASE fundidb;
-  ```
-- (Optional) Create a user and grant privileges:
-  ```sql
-  CREATE USER 'fundiuser'@'localhost' IDENTIFIED BY 'yourpassword';
-  GRANT ALL PRIVILEGES ON fundidb.* TO 'fundiuser'@'localhost';
-  FLUSH PRIVILEGES;
-  ```
-- **Import the schema:**
-  ```sh
-  mysql -u youruser -p fundidb < fundidb_schema.sql
-  ```
-- (Optional) **Import sample data:**
-  ```sh
-  mysql -u youruser -p fundidb < fundidb_sample_data.sql
-  ```
-- Update your `backend/config.py` (or wherever your DB URI is) to match your credentials:
+### 3. Set Up Supabase/Postgres Database
+- Create a [Supabase](https://supabase.com/) project.
+- In the Supabase dashboard, go to **Database** > **Connect** and copy your connection string (use the IPv4-compatible pooler URI).
+- In `backend/config.py`, set your connection string:
   ```python
-  SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://fundiuser:yourpassword@localhost/fundidb'
+  SQLALCHEMY_DATABASE_URI = 'postgresql://<user>:<password>@<host>:<port>/<database>'
   ```
+- In Supabase, use the SQL editor to run your schema (see `fundidb_schema.sql`).
+- (Optional) Import sample data from `fundidb_sample_data.sql`.
 
-### 4. Initialize the Database Tables
+### 4. Initialize the Database Tables (if needed)
 ```sh
 # From the project root:
 flask init-db
@@ -98,13 +89,13 @@ python -m backend.app
 
 ## Usage
 - **Register** as a Fundi or Client.
-- **Fundis:** Manage jobs, track earnings, and update your profile.
-- **Clients:** Request services, track jobs, and see your assigned fundi's contact info.
+- **Fundis:** Manage jobs, see client info, track earnings, and update your profile.
+- **Clients:** Request services, track jobs, see your assigned fundi's contact info, and browse available fundis.
 
 ## Team Collaboration
-- Each team member should set up their own local MySQL and import the schema (see above).
+- Each team member should set up their own Supabase project or use a shared one.
 - Share code via GitHub or your preferred platform.
-- For a shared database, consider using a cloud MySQL provider (e.g., PlanetScale) and update the DB URI in your config.
+- Update the DB URI in your config as needed.
 
 ## License
 MIT (or specify your license)

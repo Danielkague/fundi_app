@@ -14,7 +14,60 @@
       <button id="logout-btn" class="btn btn-secondary">Logout</button>
     </div>
   </header>
+  <!-- Navigation Bar -->
+  <div class="navbar">
+    <div class="nav-title">Fundi App</div>
+    <div class="nav-links">
+        <a href="/dashboard" class="nav-link">Dashboard</a>
+        <a href="/profile" class="nav-link">Profile</a>
+    </div>
+  </div>
   <main class="container">
+    <div class="dashboard-container">
+      <div class="profile-quick">
+        <div class="profile-avatar">{{ user.name[0]|upper }}</div>
+        <div class="profile-info">
+          <div><strong>{{ user.name }}</strong></div>
+          <div>{{ user.phone }}</div>
+          <div>{{ user.service }}</div>
+        </div>
+      </div>
+      <div>
+        <div class="section-title">Active Jobs</div>
+        <div class="card-list">
+          {% for job in active_jobs %}
+          <div class="card">
+            <div><strong>{{ job.title }}</strong></div>
+            <div>{{ job.date }}</div>
+            <div>{{ job.location }}</div>
+            <div>Status: {{ job.status }}</div>
+            {% if job.customer_name %}
+            <div>Client: {{ job.customer_name }}</div>
+            {% endif %}
+            {% if job.customer_phone %}
+            <div>Client Phone: {{ job.customer_phone }}</div>
+            {% endif %}
+          </div>
+          {% else %}
+          <div>No active jobs.</div>
+          {% endfor %}
+        </div>
+      </div>
+      <div>
+        <div class="section-title">Earnings</div>
+        <div class="card-list">
+          {% for earning in earnings %}
+          <div class="card">
+            <div>Job: {{ earning.job_title }}</div>
+            <div>Amount: KES {{ earning.amount }}</div>
+            <div>Date: {{ earning.date }}</div>
+          </div>
+          {% else %}
+          <div>No earnings yet.</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
     <section class="card">
       <div style="display:flex;align-items:center;gap:16px;">
         <div style="background: #0ea5e9; color: #fff; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold;">

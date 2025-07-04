@@ -34,7 +34,7 @@ body {
 /* Header Styles */
 .main-header {
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     border-bottom: 3px solid #0ea5e9;
     position: sticky;
@@ -66,7 +66,7 @@ body {
 /* Card Styles */
 .card {
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); */
     border-radius: 16px;
     padding: 24px;
     margin-bottom: 24px;
@@ -384,7 +384,7 @@ body {
 /* Footer Styles */
 .main-footer {
     background: rgba(15, 23, 42, 0.95);
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); */
     color: white;
     padding: 20px 0;
     margin-top: auto;
@@ -615,4 +615,163 @@ textarea:focus {
         background: white;
         color: black;
     }
+}
+
+/* Navigation Bar */
+.navbar {
+    background: #1565c0;
+    color: #fff;
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(26,35,126,0.08);
+}
+.navbar .nav-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.navbar .nav-links {
+    display: flex;
+    gap: 24px;
+}
+.navbar .nav-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+.navbar .nav-link:hover {
+    color: #90caf9;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(26,35,126,0.08);
+    padding: 40px 48px 32px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #1565c0;
+    margin-bottom: 18px;
+}
+
+/* Job/Earning Cards */
+.card-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+.card {
+    background: #e3f2fd;
+    border-radius: 10px;
+    padding: 20px 28px;
+    min-width: 260px;
+    flex: 1 1 300px;
+    box-shadow: 0 2px 8px rgba(21,101,192,0.06);
+    color: #1a237e;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Profile Quick View */
+.profile-quick {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: #f7faff;
+    border-radius: 8px;
+    padding: 18px 24px;
+    margin-bottom: 24px;
+}
+.profile-quick .profile-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #90caf9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #fff;
+    font-weight: 700;
+}
+.profile-quick .profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Responsive for desktop */
+@media (max-width: 900px) {
+    .dashboard-container {
+        padding: 24px 8px;
+    }
+    .card-list {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-container {
+        padding: 12px 2px;
+    }
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 12px 8px;
+    }
+    .nav-links {
+        gap: 12px;
+    }
+}
+
+.fundi-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.fundi-card {
+    min-width: 220px;
+    background: #e3f2fd;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(21,101,192,0.06);
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.fundi-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #1565c0;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+.fundi-info {
+    text-align: center;
+    color: #1a237e;
 }
