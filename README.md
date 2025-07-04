@@ -2,6 +2,10 @@
 
 A Flask-based web application for connecting clients with skilled workers (fundis) for various services.
 
+## 🌐 Live Application
+
+**Visit the live app:** [https://fundi-app.onrender.com](https://fundi-app.onrender.com)
+
 ## Features
 
 - **User Authentication**: Registration and login for both clients and fundis
@@ -16,7 +20,7 @@ A Flask-based web application for connecting clients with skilled workers (fundi
 - **Backend**: Flask (Python)
 - **Database**: PostgreSQL (Supabase)
 - **Frontend**: HTML, CSS, JavaScript
-- **Deployment**: Render.com ready
+- **Deployment**: Render.com
 
 ## Local Development
 
@@ -59,7 +63,25 @@ The app will be available at `http://localhost:5000`
 
 ## Deployment
 
-### Deploy to Render.com
+### ✅ Successfully Deployed on Render.com
+
+The application is currently live and deployed on Render.com with the following configuration:
+
+- **Live URL**: [https://fundi-app.onrender.com](https://fundi-app.onrender.com)
+- **Build Command**: `pip install -r requirements.txt`
+- **Start Command**: `gunicorn backend.app:app`
+- **Database**: Supabase PostgreSQL (connected and working)
+- **Environment**: Production-ready with proper security settings
+
+### Environment Variables Used in Production
+
+- `DATABASE_URL`: Supabase PostgreSQL connection string
+- `SECRET_KEY`: Secure production secret key
+- `FLASK_DEBUG`: `False` (production mode)
+- `FLASK_ENV`: `production`
+- `SQLALCHEMY_TRACK_MODIFICATIONS`: `False`
+
+### Deploy to Render.com (Instructions)
 
 1. **Connect your GitHub repository** to Render.com
 
