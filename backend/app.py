@@ -16,7 +16,16 @@ CORS(app)
 
 # Load config from config.py
 app.config.from_pyfile('config.py')
-db.init_app(app)
+
+# Initialize database with error handling
+try:
+    db.init_app(app)
+    print("✅ Database initialized successfully")
+    print(f"Database URL: {app.config.get('SQLALCHEMY_DATABASE_URI', 'Not set')[:50]}...")
+except Exception as e:
+    print(f"❌ Database initialization failed: {e}")
+    print(f"Current config: {app.config.get('SQLALCHEMY_DATABASE_URI', 'Not set')}")
+    raise
 
 from backend.models import User, Job, Earning
 
