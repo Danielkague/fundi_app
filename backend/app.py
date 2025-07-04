@@ -230,24 +230,28 @@ def dashboard_page():
     if not user_id:
         return redirect('/login')
     user = User.query.get(user_id)
-    # Active jobs for this fundi
+    if not user:
+        return redirect('/login')
+    
+    # Active jobs for this fundi with client information
     active_jobs = []
-    jobs = Job.query.filter_by(fundi_id=user_id, status='in_progress').all() if user_id else []
+    jobs = Job.query.filter_by(fundi_id=user_id, status='in_progress').all()
+    
     for job in jobs:
-        customer_name = job.customer
-        customer_phone = None
-        customer = User.query.filter_by(name=customer_name, role='client').first()
-        if customer:
-            customer_phone = customer.phone
+        # Find the client by name
+        client = User.query.filter_by(name=job.customer, role='client').first()
+        client_phone = client.phone if client else None
+        
         active_jobs.append({
             'id': job.id,
             'title': job.title,
             'date': job.date,
             'location': job.location,
             'status': job.status,
-            'customer_name': customer_name,
-            'customer_phone': customer_phone
+            'customer_name': job.customer,
+            'customer_phone': client_phone
         })
+    
     earnings = []  # Replace with your actual earnings query if needed
     return render_template('dashboard.html', user=user, active_jobs=active_jobs, earnings=earnings)
 
@@ -336,6 +340,40 @@ def client_jobs():
     flash('Job request submitted successfully!', 'success')
     return redirect('/client-dashboard')
 
+# --- Get client jobs with fundi info (for real-time updates) ---
+@app.route('/api/client/jobs/status', methods=['GET'])
+def client_jobs_status():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Not authenticated'}), 401
+    
+    user = User.query.get(user_id)
+    if not user or user.role != 'client':
+        return jsonify({'error': 'Not a client'}), 403
+    
+    jobs = Job.query.filter_by(customer=user.name).all()
+    jobs_list = []
+    for job in jobs:
+        fundi_name = None
+        fundi_phone = None
+        if job.fundi_id:
+            fundi = User.query.get(job.fundi_id)
+            if fundi:
+                fundi_name = fundi.name
+                fundi_phone = fundi.phone
+        jobs_list.append({
+            'id': job.id,
+            'title': job.title,
+            'date': job.date.strftime('%Y-%m-%d'),
+            'location': job.location,
+            'amount': job.amount,
+            'status': job.status,
+            'fundi_id': job.fundi_id,
+            'fundi_name': fundi_name,
+            'fundi_phone': fundi_phone
+        })
+    return jsonify(jobs_list)
+
 # --- Fundi Search ---
 @app.route('/api/fundis', methods=['GET'])
 def search_fundis():
@@ -356,9 +394,36 @@ def search_fundis():
 def client_dashboard_page():
     user_id = session.get('user_id')
     user = User.query.get(user_id) if user_id else None
-    jobs = Job.query.filter_by(customer=user.name).all() if user else []
+    if not user:
+        return redirect('/login')
+    
+    # Get all jobs for this client with fundi information
+    jobs = Job.query.filter_by(customer=user.name).all()
+    jobs_with_fundi = []
+    
+    for job in jobs:
+        fundi_name = None
+        fundi_phone = None
+        if job.fundi_id:
+            fundi = User.query.get(job.fundi_id)
+            if fundi:
+                fundi_name = fundi.name
+                fundi_phone = fundi.phone
+        
+        jobs_with_fundi.append({
+            'id': job.id,
+            'title': job.title,
+            'date': job.date,
+            'location': job.location,
+            'amount': job.amount,
+            'status': job.status,
+            'fundi_id': job.fundi_id,
+            'fundi_name': fundi_name,
+            'fundi_phone': fundi_phone
+        })
+    
     fundis = User.query.filter_by(role='fundi').all()
-    return render_template('client_dashboard.html', user=user, jobs=jobs, fundis=fundis)
+    return render_template('client_dashboard.html', user=user, jobs=jobs_with_fundi, fundis=fundis)
 
 @app.route('/profile')
 def profile_page():

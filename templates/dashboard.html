@@ -40,12 +40,14 @@
             <div><strong>{{ job.title }}</strong></div>
             <div>{{ job.date }}</div>
             <div>{{ job.location }}</div>
-            <div>Status: {{ job.status }}</div>
+            <div>Status: <span class="status-{{ job.status }}">{{ job.status|title }}</span></div>
             {% if job.customer_name %}
-            <div>Client: {{ job.customer_name }}</div>
-            {% endif %}
-            {% if job.customer_phone %}
-            <div>Client Phone: <a href="tel:{{ job.customer_phone }}">{{ job.customer_phone }}</a></div>
+            <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e5e7eb;">
+              <div><strong>Client:</strong> {{ job.customer_name }}</div>
+              {% if job.customer_phone %}
+              <div>Contact: <a href="tel:{{ job.customer_phone }}" class="contact-link">{{ job.customer_phone }}</a></div>
+              {% endif %}
+            </div>
             {% endif %}
           </div>
           {% else %}
@@ -154,5 +156,34 @@
     </div>
   </footer>
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <style>
+  /* Status indicators */
+  .status-pending {
+    color: #f59e0b;
+    font-weight: 600;
+  }
+  .status-in_progress {
+    color: #3b82f6;
+    font-weight: 600;
+  }
+  .status-completed {
+    color: #10b981;
+    font-weight: 600;
+  }
+  .status-paid {
+    color: #8b5cf6;
+    font-weight: 600;
+  }
+  
+  /* Contact links */
+  .contact-link {
+    color: #0ea5e9;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .contact-link:hover {
+    text-decoration: underline;
+  }
+  </style>
 </body>
 </html> 

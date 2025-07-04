@@ -44,18 +44,25 @@
         </div>
         <div>
             <div class="section-title">My Jobs</div>
-            <div class="card-list">
+            <div class="card-list" id="jobs-container">
                 {% for job in jobs %}
-                <div class="card">
+                <div class="card job-card" data-job-id="{{ job.id }}">
                     <div><strong>{{ job.title }}</strong></div>
                     <div>{{ job.date }}</div>
                     <div>{{ job.location }}</div>
-                    <div>Status: {{ job.status }}</div>
+                    <div>Amount: KES {{ job.amount }}</div>
+                    <div>Status: <span class="status-{{ job.status }}">{{ job.status|title }}</span></div>
                     {% if job.fundi_name %}
-                    <div>Fundi: {{ job.fundi_name }}</div>
-                    {% endif %}
-                    {% if job.fundi_phone %}
-                    <div>Fundi Phone: <a href="tel:{{ job.fundi_phone }}">{{ job.fundi_phone }}</a></div>
+                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e5e7eb;">
+                        <div><strong>Assigned Fundi:</strong> {{ job.fundi_name }}</div>
+                        {% if job.fundi_phone %}
+                        <div>Contact: <a href="tel:{{ job.fundi_phone }}" class="contact-link">{{ job.fundi_phone }}</a></div>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <div style="margin-top: 8px; color: #6b7280; font-style: italic;">
+                        Waiting for fundi to accept...
+                    </div>
                     {% endif %}
                 </div>
                 {% else %}
@@ -128,6 +135,43 @@
     background: #ffebee;
     color: #c62828;
     border: 1px solid #ef9a9a;
+  }
+  
+  /* Status indicators */
+  .status-pending {
+    color: #f59e0b;
+    font-weight: 600;
+  }
+  .status-in_progress {
+    color: #3b82f6;
+    font-weight: 600;
+  }
+  .status-completed {
+    color: #10b981;
+    font-weight: 600;
+  }
+  .status-paid {
+    color: #8b5cf6;
+    font-weight: 600;
+  }
+  
+  /* Contact links */
+  .contact-link {
+    color: #0ea5e9;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .contact-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Job card improvements */
+  .job-card {
+    transition: all 0.2s ease;
+  }
+  .job-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
   </style>
 </body>
