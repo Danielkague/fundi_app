@@ -99,12 +99,24 @@ def accept_job(job_id):
     user_id = session.get('user_id')
     if not user_id:
         return jsonify({'error': 'Not authenticated'}), 401
+    
+    fundi = User.query.get(user_id)
     job = Job.query.get(job_id)
-    if not job or (job.fundi_id is not None and job.fundi_id != user_id):
-        return abort(404)
+    
+    if not job:
+        return jsonify({'error': 'Job not found'}), 404
+    
+    if job.fundi_id is not None and job.fundi_id != user_id:
+        return jsonify({'error': 'Job already assigned'}), 400
+    
+    # Accept the job
     job.fundi_id = user_id
     job.status = 'in_progress'
     db.session.commit()
+    
+    print(f"DEBUG: Job {job_id} accepted by fundi {fundi.name} (ID: {user_id})")
+    print(f"DEBUG: Job status: {job.status}, fundi_id: {job.fundi_id}")
+    
     return jsonify({'message': 'Job accepted'})
 
 @app.route('/api/jobs/<int:job_id>/decline', methods=['POST'])
@@ -409,6 +421,11 @@ def client_dashboard_page():
             if fundi:
                 fundi_name = fundi.name
                 fundi_phone = fundi.phone
+                print(f"DEBUG: Job {job.id} - Fundi found: {fundi_name} ({fundi_phone})")
+            else:
+                print(f"DEBUG: Job {job.id} - Fundi ID {job.fundi_id} not found in database")
+        else:
+            print(f"DEBUG: Job {job.id} - No fundi_id assigned")
         
         jobs_with_fundi.append({
             'id': job.id,

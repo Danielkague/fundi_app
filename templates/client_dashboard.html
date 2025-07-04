@@ -52,6 +52,10 @@
                     <div>{{ job.location }}</div>
                     <div>Amount: KES {{ job.amount }}</div>
                     <div>Status: <span class="status-{{ job.status }}">{{ job.status|title }}</span></div>
+                    <!-- DEBUG INFO -->
+                    <div style="font-size: 0.8rem; color: #666; margin-top: 4px;">
+                        DEBUG: fundi_id={{ job.fundi_id }}, fundi_name={{ job.fundi_name }}, fundi_phone={{ job.fundi_phone }}
+                    </div>
                     {% if job.fundi_name %}
                     <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e5e7eb;">
                         <div><strong>Assigned Fundi:</strong> {{ job.fundi_name }}</div>
