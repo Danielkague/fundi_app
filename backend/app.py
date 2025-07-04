@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, abort, redirect
+from flask import Flask, request, jsonify, render_template, abort, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
@@ -33,8 +33,8 @@ print("STATIC DIR EXISTS:", os.path.isdir(app.static_folder))
 print("STATIC DIR CONTENTS:", os.listdir(app.static_folder))
 
 @app.route('/')
-def root():
-    return redirect('/login')
+def landing():
+    return render_template('landing.html')
 
 @app.route('/login')
 def login_page():
